@@ -4,18 +4,18 @@ import styled from 'styled-components';
 import CardHelper from '../UI/Card';
 import LaunchDate from './LaunchDate';
 import { Colors } from '../../styledHelpers/Colors';
+import { media } from '../../styledHelpers/Breakpoints';
 
 const Card = styled(CardHelper)`
-  max-width: 900px;
-  width: 900px;
+	width: 100%;
 	background-color: ${Colors.cardBackground};
 	position: relative;
 	display: flex;
 	justify-content: center;
 	flex-direction: column;
 	align-items: center;
-	margin: 0 40px;
-  margin-top: 120px;
+	margin: 0 auto;
+	margin-bottom: 100px;
 
 	& > p {
 		color: white;
@@ -35,24 +35,45 @@ const Line = styled.div`
 	height: 4px;
 	border-radius: 2px;
 	background-color: white;
-	margin: 0 auto;
 `;
 
 const RocketInfo = styled.div`
 	width: 67%;
-	& > h2 {
+	box-sizing: border-box;
+	padding: 10px 0;
+  position: absolute;
+  top: 0;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  & > h2 {
 		font-size: 1.2rem;
 	}
 	& > p {
 		font-size: 0.9rem;
 	}
+	${media.tablet`
+    width: 67%;
+    box-sizing: border-box;
+    padding: 10px 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    & > h2 {
+      font-size: 1.2rem;
+    }
+    & > p {
+      font-size: 0.9rem;
+    }
+	`}
 `;
 
 const MissionInfo = styled.div`
-  display: flex;
 	color: white;
-  max-width: 850px;
-	width: 850px;
+	width: 95%;
 	box-sizing: border-box;
 	padding: 10px;
 	margin-bottom: 20px;
@@ -74,15 +95,23 @@ const MissionInfo = styled.div`
 `;
 
 const Orbit = styled.div`
-	width: 100%;
+	${media.tablet`
+    margin-top: 150px;
+    padding: 0 25px;
+    flex-direction: row;
+	`}
+	
+  width: 100%;
 	color: white;
-	margin-top: 150px;
+	margin-top: 220px;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	height: fit-content;
-	padding: 0 25px;
+  padding: 0 25px;
+	padding-bottom: 20px;
 	box-sizing: border-box;
+  flex-direction: column;
 
 	& > h2 {
 		margin: 0;
@@ -100,19 +129,30 @@ const Orbit = styled.div`
 `;
 
 const Header = styled.header`
-	width: 850px;
-	background-color: ${Colors.mainThemeColor};
+	${media.tablet`
 	height: 150px;
+  flex-direction: row;
+
+	& > img {
+		min-width: 33% !important;
+    }	
+	`}
+
+	width: 95%;
+	height: 220px;
+	background-color: ${Colors.mainThemeColor};
 	border-radius: 15px;
 	position: absolute;
 	top: -20px;
 	overflow: hidden;
 	display: flex;
 	color: white;
+	flex-direction: column;
+  align-items: center;
 
 	& > img {
-		width: 33%;
-		height: auto;
+		min-width: 100%;
+		height: 220px;
 		object-fit: cover;
 		border-radius: 15px;
 	}
@@ -127,7 +167,7 @@ export interface ILaunchCard {
 	country: string;
 	place: string;
 	image: string;
-  date: string;
+	date: string;
 }
 
 const LaunchCard: FC<ILaunchCard> = (props) => {
@@ -154,7 +194,7 @@ const LaunchCard: FC<ILaunchCard> = (props) => {
 			<MissionInfo>
 				<p>{props.description ? props.description : 'No Description found'}</p>
 			</MissionInfo>
-			<LaunchDate date={props.date}/>
+			<LaunchDate date={props.date} />
 		</Card>
 	);
 };

@@ -9,7 +9,11 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding-top: 150px;
+  padding-left: 25px;
+  padding-right: 25px;
 `;
 
 export type Launch = {

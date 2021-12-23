@@ -74,7 +74,7 @@ const NavWrapper = styled.div<INavWrapper>`
 		gap: 1.5rem;
 		width: 300px;
     transition: ease-in-out 0.2s;
-    transform: ${props => props.isMobileMenuVisible ? 'translateX(300px)' : 'translateX(0px)'};
+    transform: ${props => !props.isMobileMenuVisible ? 'translateX(300px)' : 'translateX(0px)'};
 
 		& > li {
 			display: flex;
@@ -138,7 +138,7 @@ const Navbar: FC = () => {
 					<li>Rockets</li>
 				</ul>
 				<Hamburger onClick={showMobileMenuHandler}>
-					{isMobileMenuVisible ? <GiHamburgerMenu /> : <MdClose />}
+					{!isMobileMenuVisible ? <GiHamburgerMenu /> : <MdClose />}
 				</Hamburger>
 			</NavWrapper>
 		</nav>
