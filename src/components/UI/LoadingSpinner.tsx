@@ -7,6 +7,7 @@ const Spinner = styled.div`
 	width: 80px;
 	height: 80px;
   margin-top: 20px;
+  padding: 20px;
 
 	&:after {
 		content: ' ';

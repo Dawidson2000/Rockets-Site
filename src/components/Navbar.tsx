@@ -5,10 +5,10 @@ import { media } from '../styledHelpers/Breakpoints';
 
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { MdClose } from 'react-icons/md';
-
+import { NavLink } from 'react-router-dom';
 
 export interface INavWrapper {
-  isMobileMenuVisible: boolean;
+	isMobileMenuVisible: boolean;
 }
 
 const NavWrapper = styled.div<INavWrapper>`
@@ -17,7 +17,7 @@ const NavWrapper = styled.div<INavWrapper>`
 	background-color: ${Colors.cardBackground};
 	position: fixed;
 	top: 0;
-  left: 0;
+	left: 0;
 	z-index: 10;
 	box-shadow: rgba(52, 86, 139, 0.5) 0px 10px 15px -3px,
 		rgba(52, 86, 139, 0.05) 0px 4px 6px -2px;
@@ -30,7 +30,7 @@ const NavWrapper = styled.div<INavWrapper>`
 	& > ul {
 		color: white;
 		list-style: none;
-    box-sizing: border-box;
+		box-sizing: border-box;
 
 		& > li {
 			display: flex;
@@ -73,8 +73,9 @@ const NavWrapper = styled.div<INavWrapper>`
 		padding-right: 40px;
 		gap: 1.5rem;
 		width: 300px;
-    transition: ease-in-out 0.2s;
-    transform: ${props => !props.isMobileMenuVisible ? 'translateX(300px)' : 'translateX(0px)'};
+		transition: ease-in-out 0.2s;
+		transform: ${(props) =>
+			!props.isMobileMenuVisible ? 'translateX(300px)' : 'translateX(0px)'};
 
 		& > li {
 			display: flex;
@@ -118,12 +119,22 @@ const Hamburger = styled.button`
 	}
 `;
 
+const StyledNavLink = styled(NavLink)`
+	color: inherit;
+	text-decoration: none;
+
+	&.active {
+		color: ${Colors.mainThemeColor};
+	}
+`;
+
 const Navbar: FC = () => {
-	const [isMobileMenuVisible, setIsMobileMenuVisible] = useState<boolean>(false);
+	const [isMobileMenuVisible, setIsMobileMenuVisible] =
+		useState<boolean>(false);
 
 	const showMobileMenuHandler = () => {
-    setIsMobileMenuVisible(prevstate => !prevstate);
-  };
+		setIsMobileMenuVisible((prevstate) => !prevstate);
+	};
 
 	return (
 		<nav>
@@ -132,10 +143,20 @@ const Navbar: FC = () => {
 					<span>BANDYTA</span>
 				</Logo>
 				<ul>
-					<li>Home</li>
-					<li>Upcoming Launches</li>
-					<li>Events</li>
-					<li>Rockets</li>
+					<li>
+						<StyledNavLink to='/home'>Home</StyledNavLink>
+					</li>
+					<li>
+						<StyledNavLink to='/upcoming-launches'>
+							Upcoming Launches
+						</StyledNavLink>
+					</li>
+					<li>
+						<StyledNavLink to='/events'>Events</StyledNavLink>
+					</li>
+					<li>
+						<StyledNavLink to='/spacecrafts'>Spacecrafts</StyledNavLink>
+					</li>
 				</ul>
 				<Hamburger onClick={showMobileMenuHandler}>
 					{!isMobileMenuVisible ? <GiHamburgerMenu /> : <MdClose />}
