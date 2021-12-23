@@ -4,17 +4,18 @@ import styled from 'styled-components';
 import CardHelper from '../UI/Card';
 import LaunchDate from './LaunchDate';
 import { Colors } from '../../styledHelpers/Colors';
-import { Launch } from './Launches';
 
 const Card = styled(CardHelper)`
-	width: 900px;
+  max-width: 900px;
+  width: 900px;
 	background-color: ${Colors.cardBackground};
 	position: relative;
 	display: flex;
 	justify-content: center;
 	flex-direction: column;
 	align-items: center;
-	margin: 60px auto;
+	margin: 0 40px;
+  margin-top: 120px;
 
 	& > p {
 		color: white;
@@ -48,7 +49,9 @@ const RocketInfo = styled.div`
 `;
 
 const MissionInfo = styled.div`
+  display: flex;
 	color: white;
+  max-width: 850px;
 	width: 850px;
 	box-sizing: border-box;
 	padding: 10px;

@@ -1,7 +1,16 @@
 import { FC, useEffect, useState } from 'react';
-import useHttp from '../../hooks/use-http';
-import LoadingSpinner from '../UI/LoadingSpinner';
-import LaunchCard from './LaunchCard';
+import useHttp from '../hooks/use-http';
+import LoadingSpinner from '../components/UI/LoadingSpinner';
+import LaunchCard from '../components/Launches/LaunchCard';
+
+import styled from 'styled-components';
+
+const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+`;
 
 export type Launch = {
   id: string,
@@ -62,9 +71,9 @@ const Launches: FC = () => {
   }
 
 	return (
-    <>
+    <Wrapper>
       {content}
-    </>
+    </Wrapper>
   );
 };
 
