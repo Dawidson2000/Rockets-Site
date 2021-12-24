@@ -32,11 +32,12 @@ const Spacecrafts: FC = () => {
 			const loadedSpacecrafts: any[] = [];
 			const Spacecrafts: any[] = launchObj.results;
 
-			Spacecrafts.forEach((rocket: any) => {
+			Spacecrafts.forEach((spacecraft: any) => {
 				console.log('rockets');
 				loadedSpacecrafts.push({
-					id: rocket?.id,
-					name: rocket?.spacecraft?.name,
+					id: spacecraft?.id,
+					name: spacecraft?.spacecraft?.name,
+          img: spacecraft?.spacecraft?.spacecraft_config?.image_url
 				});
 			});
 			console.log(loadedSpacecrafts);
@@ -61,7 +62,7 @@ const Spacecrafts: FC = () => {
 
 	let content: any = spacecrafts
 		.slice(offset, offset + PER_PAGE)
-		.map((rocket: any) => <SpacecraftCard name={rocket.name} />);
+		.map((spacecraft: any) => <SpacecraftCard key={spacecraft.id} {...spacecraft} />);
 
 	if (error) {
 		content = <p style={{ color: 'white' }}>Try again</p>;

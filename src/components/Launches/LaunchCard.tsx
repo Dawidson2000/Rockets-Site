@@ -38,11 +38,8 @@ const Line = styled.div`
 `;
 
 const RocketInfo = styled.div`
-	width: 67%;
 	box-sizing: border-box;
-	padding: 10px 0;
-  position: absolute;
-  top: 0;
+	padding: 15px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -96,14 +93,14 @@ const MissionInfo = styled.div`
 
 const Orbit = styled.div`
 	${media.tablet`
-    margin-top: 150px;
+    //margin-top: 200px;
     padding: 0 25px;
     flex-direction: row;
 	`}
 	
   width: 100%;
 	color: white;
-	margin-top: 220px;
+	//margin-top: 220px;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -128,9 +125,12 @@ const Orbit = styled.div`
 	}
 `;
 
-const Header = styled.header`
+export interface IHeader {
+  img: string;
+}
+
+const Header = styled.header<IHeader>`
 	${media.tablet`
-	height: 150px;
   flex-direction: row;
 
 	& > img {
@@ -139,16 +139,21 @@ const Header = styled.header`
 	`}
 
 	width: 95%;
-	height: 220px;
+  min-height: 200px;
+  height: fit-content;
 	background-color: ${Colors.mainThemeColor};
 	border-radius: 15px;
-	position: absolute;
-	top: -20px;
+	//position: absolute;
+	//top: -20px;
+  transform: translateY(-20px);
 	overflow: hidden;
 	display: flex;
 	color: white;
 	flex-direction: column;
   align-items: center;
+  background-image: ${(props: any) => `url(${props.img})`};
+	background-position: center;
+  background-size: cover;
 
 	& > img {
 		min-width: 100%;
@@ -173,12 +178,7 @@ export interface ILaunchCard {
 const LaunchCard: FC<ILaunchCard> = (props) => {
 	return (
 		<Card>
-			<Header>
-				{props.image ? (
-					<img src={props.image} />
-				) : (
-					<img src='../../assets/images/NoPhoto.jpg' />
-				)}
+			<Header img={props.image ? props.image : '../../assets/images/NoPhoto.jpg'}>			
 				<RocketInfo>
 					<h2>{props.name}</h2>
 					<Line />
