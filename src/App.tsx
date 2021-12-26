@@ -6,6 +6,7 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import LoadingSpinner from './components/UI/LoadingSpinner';
 import Events from './pages/Events';
+import SpacecraftDetails from './pages/SpacecraftDetails';
 
 const Launches = React.lazy(() => import('./pages/Launches'));
 const Spacecrafts = React.lazy(() => import('./pages/Spacecrafts/Spacecrafts'));
@@ -21,6 +22,7 @@ function App() {
           <Route path='/upcoming-launches' element={<Launches />} />
           <Route path='/events' element={<Events />} />
           <Route path='/spacecrafts' element={<Spacecrafts />} />
+          <Route path='/spacecrafts/spacecraft-details/:spacecraftId' element={<SpacecraftDetails />} />
         </Routes>
       </Suspense>
 		</div>

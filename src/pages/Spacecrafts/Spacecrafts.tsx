@@ -1,9 +1,10 @@
-import { FC, useEffect, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
 import styled from 'styled-components';
 import SpacecraftCard from '../../components/Launches/SpacecraftCard';
 import LoadingSpinner from '../../components/UI/LoadingSpinner';
 import useHttp from '../../hooks/use-http';
+import SearchInput from '../../components/UI/SearchInput';
 
 import './styles.css';
 
@@ -16,32 +17,41 @@ const Wrapper = styled.div`
 	padding-top: 150px;
 	padding-left: 25px;
 	padding-right: 25px;
-  gap: 1.5rem;
+	gap: 1.5rem;
 `;
 
 const PER_PAGE = 10;
 
+export type Spacecraft = {
+	id: number;
+	name: string;
+	img: string;
+};
+
 const Spacecrafts: FC = () => {
-	const [spacecrafts, setSpacecrafts] = useState<any[]>([]);
+	const [spacecrafts, setSpacecrafts] = useState<Spacecraft[]>([]);
+	const [filteredSpaceCrafts, setFilteredSpaceCrafts] = useState<Spacecraft[]>(
+		[]
+	);
 	const [currentPage, setCurrentPage] = useState(0);
+	const [filteredValue, setFilteredValue] = useState('');
 
 	const { error, isLoading, sendRequest: fetchSpacecrafts } = useHttp();
 
 	useEffect(() => {
 		const apllySpacecrafts = (launchObj: any) => {
-			const loadedSpacecrafts: any[] = [];
+			const loadedSpacecrafts: Spacecraft[] = [];
 			const Spacecrafts: any[] = launchObj.results;
 
 			Spacecrafts.forEach((spacecraft: any) => {
-				console.log('rockets');
 				loadedSpacecrafts.push({
 					id: spacecraft?.id,
 					name: spacecraft?.spacecraft?.name,
-          img: spacecraft?.spacecraft?.spacecraft_config?.image_url
+					img: spacecraft?.spacecraft?.spacecraft_config?.image_url,
 				});
 			});
-			console.log(loadedSpacecrafts);
 			setSpacecrafts(loadedSpacecrafts);
+			setFilteredSpaceCrafts(loadedSpacecrafts);
 		};
 
 		fetchSpacecrafts(
@@ -58,11 +68,13 @@ const Spacecrafts: FC = () => {
 
 	const offset = currentPage * PER_PAGE;
 
-	const pageCount = Math.ceil(spacecrafts.length / PER_PAGE);
+	const pageCount = Math.ceil(filteredSpaceCrafts.length / PER_PAGE);
 
-	let content: any = spacecrafts
+	let content: any = filteredSpaceCrafts
 		.slice(offset, offset + PER_PAGE)
-		.map((spacecraft: any) => <SpacecraftCard key={spacecraft.id} {...spacecraft} />);
+		.map((spacecraft: Spacecraft) => (
+			<SpacecraftCard key={spacecraft.id} {...spacecraft} />
+		));
 
 	if (error) {
 		content = <p style={{ color: 'white' }}>Try again</p>;
@@ -72,8 +84,24 @@ const Spacecrafts: FC = () => {
 		content = <LoadingSpinner />;
 	}
 
+	const inputSearchHandler = (e: ChangeEvent<HTMLInputElement>) => {
+		e.preventDefault();
+		const enteredValue = e.target.value;
+		setFilteredValue(enteredValue);
+
+		let filteredSpacecrafts = [...spacecrafts];
+		filteredSpacecrafts = filteredSpacecrafts.filter((spacecraft) =>
+			spacecraft.name.toLowerCase().includes(enteredValue.toLowerCase())
+		);
+		console.log(filteredSpacecrafts);
+		setFilteredSpaceCrafts(filteredSpacecrafts);
+	};
+
 	return (
 		<Wrapper>
+    <div style={{marginLeft: 'auto'}}>
+		  <SearchInput value={filteredValue} placeholder='Search by name...' onChange={inputSearchHandler}/>
+    </div>
 			{content}
 			<ReactPaginate
 				previousLabel={'PREVIOUS'}

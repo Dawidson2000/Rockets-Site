@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import CardHelper from '../UI/Card';
 import { Colors } from '../../styledHelpers/Colors';
 import { media } from '../../styledHelpers/Breakpoints';
+import { Link } from 'react-router-dom';
 
 export interface ICard {
 	img: string;
@@ -21,10 +22,12 @@ const Card = styled(CardHelper)<ICard>`
 	background-position: center;
   background-size: cover;
 
-	& > p {
+	& > a {
 		background-color: rgb(0, 0, 0, 0.5);
     padding: 10px 20px;
     border-radius: 15px;
+    text-decoration: none;
+    color: white;
 
     &:hover {
       background-color: rgb(0, 0, 0, 0.8);
@@ -33,13 +36,14 @@ const Card = styled(CardHelper)<ICard>`
 `;
 
 export interface ISpacecraftCard {
+  id: number;
 	name: string;
 	img: string;
 }
 const SpacecraftCard: FC<ISpacecraftCard> = (props) => {
 	return (
 		<Card img={props.img}>
-			<p>{props.name}</p>
+			<Link to={`/spacecrafts/spacecraft-details/${props.id}`}>{props.name}</Link>
 		</Card>
 	);
 };
