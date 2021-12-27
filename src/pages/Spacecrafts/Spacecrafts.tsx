@@ -14,9 +14,7 @@ const Wrapper = styled.div`
 	flex-direction: column;
 	max-width: 900px;
 	margin: 0 auto;
-	padding-top: 150px;
-	padding-left: 25px;
-	padding-right: 25px;
+	padding-top: 130px;
 	gap: 1.5rem;
 `;
 
@@ -30,9 +28,7 @@ export type Spacecraft = {
 
 const Spacecrafts: FC = () => {
 	const [spacecrafts, setSpacecrafts] = useState<Spacecraft[]>([]);
-	const [filteredSpaceCrafts, setFilteredSpaceCrafts] = useState<Spacecraft[]>(
-		[]
-	);
+	const [filteredSpaceCrafts, setFilteredSpaceCrafts] = useState<Spacecraft[]>([]);
 	const [currentPage, setCurrentPage] = useState(0);
 	const [filteredValue, setFilteredValue] = useState('');
 
@@ -60,6 +56,8 @@ const Spacecrafts: FC = () => {
 			},
 			apllySpacecrafts
 		);
+
+    return () => {};
 	}, [fetchSpacecrafts]);
 
 	const pageClickHandler = ({ selected: selectedPage }: any) => {

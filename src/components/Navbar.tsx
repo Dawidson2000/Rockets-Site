@@ -5,7 +5,7 @@ import { media } from '../styledHelpers/Breakpoints';
 
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { MdClose } from 'react-icons/md';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 export interface INavWrapper {
 	isMobileMenuVisible: boolean;
@@ -14,13 +14,11 @@ export interface INavWrapper {
 const NavWrapper = styled.div<INavWrapper>`
 	width: 100%;
 	height: 60px;
-	background-color: ${Colors.cardBackground};
+	background-color: black;
 	position: fixed;
 	top: 0;
 	left: 0;
 	z-index: 10;
-	box-shadow: rgba(52, 86, 139, 0.5) 0px 10px 15px -3px,
-		rgba(52, 86, 139, 0.05) 0px 4px 6px -2px;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -66,7 +64,7 @@ const NavWrapper = styled.div<INavWrapper>`
 		top: 60px;
 		right: 0;
 		height: 100vh;
-		background-color: ${Colors.cardBackground};
+		background-color: black;
 		margin: 0;
 		box-shadow: rgba(52, 86, 139, 0.5) 0px 10px 15px -3px,
 			rgba(52, 86, 139, 0.05) 0px 4px 6px -2px;
@@ -88,8 +86,10 @@ const NavWrapper = styled.div<INavWrapper>`
 const Logo = styled.div`
 	color: white;
 
-	& > span {
+	& > a {
 		font-size: 2rem;
+    text-decoration: none;
+    color: white;
 	}
 `;
 
@@ -140,7 +140,7 @@ const Navbar: FC = () => {
 		<nav>
 			<NavWrapper isMobileMenuVisible={isMobileMenuVisible}>
 				<Logo>
-					<span>BANDYTA</span>
+					<Link to='/home' >BANDYTA</Link>
 				</Logo>
 				<ul>
 					<li>

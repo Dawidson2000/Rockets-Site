@@ -11,9 +11,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   max-width: 900px;
   margin: 0 auto;
-  padding-top: 150px;
-  padding-left: 25px;
-  padding-right: 25px;
+  padding-top: 130px;
 `;
 
 export type Launch = {
