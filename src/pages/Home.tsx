@@ -10,7 +10,7 @@ const Home: FC = () => {
 
 	return (
     <HomeW>
-      HOME
+      HOME PAGE
     </HomeW>
   );
 };
