@@ -42,8 +42,8 @@ export const addCommentFirebase = async (text: any, parentId = '0') => {
 		id: newCommentKey,
 		body: text,
 		parentId,
-		userId: '1',
-		username: 'John',
+		userId: '2',
+		username: 'Jack',
 		createdAt: new Date().toISOString(),
 	};
 

@@ -34,30 +34,24 @@ const Comments: FC<IComments> = (props) => {
 	};
 
 	const addComment = (text: string, parentId?: any) => {
-    const existedComments = [...comments];
-		
     addCommentFirebase(text, parentId).then((comment) =>
-			setComments([comment, ...existedComments])
+			setComments(prevComments => [comment, ...prevComments])
 		);
 		setActiveComment(null);
 	};
 
-	const deleteComment = (commentId: string) => {
-    const existedComments = [...comments];
-		
+	const deleteComment = (commentId: string) => {		
     deleteCommentFirebase(commentId).then(() => {
-			const updatedComments = existedComments.filter(
+			const updatedComments = comments.filter(
 				(comment) => comment.id != commentId
 			);
 			setComments(updatedComments);
 		});
 	};
 
-	const updateComment = (updatingComment: CommentType, text: string) => {
-    const existedComments = [...comments];
-		
+	const updateComment = (updatingComment: CommentType, text: string) => {	
     updateCommentFirebase(updatingComment, text).then(() => {
-			const updatedComments = existedComments.map((existedComment) => {
+			const updatedComments = comments.map((existedComment) => {
 				if (existedComment.id === updatingComment.id) {
 					return { ...existedComment, body: text };
 				}
