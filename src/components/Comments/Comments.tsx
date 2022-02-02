@@ -1,8 +1,9 @@
 import { FC, useEffect, useState } from 'react';
-import { getComments } from './api';
+import { addCommentFirebase, getComments, updateCommentFirebase } from './api';
 import Comment, { IComment } from './Comment';
 import CommentForm from './CommentForm';
-import { createComment, deleteComment as removeCommentApi, updateComment as updateCommentApi } from './api';
+import { createComment as createCommentApi, deleteComment as removeCommentApi, updateComment as updateCommentApi } from './api';
+import { getAllCommentsFirebase } from './api';
 import styled from 'styled-components';
 import CommentType, { ChangeCommentType } from '../../modals/comment-type';
 
@@ -20,7 +21,8 @@ export interface IComments {
 const Comments: FC<IComments> = (props) => {
     const [comments, setComments] = useState<CommentType[]>([]);
     const [activeComment, setActiveComment] = useState<null | ChangeCommentType>(null);
-    const rootComments = comments.filter(comment => comment.parentId === null);
+    const rootComments = comments.filter(comment => comment.parentId === '0');
+    console.log(rootComments);
 
     const getReplies = (commentId: string) => {
         return comments.filter(comment => comment.parentId === commentId)
@@ -28,7 +30,7 @@ const Comments: FC<IComments> = (props) => {
     };
 
     const addComment = (text: string, parentId?: any) => {
-        createComment(text, parentId).then(comment =>
+      addCommentFirebase(text, parentId).then(comment =>
             setComments([comment, ...comments]));
             setActiveComment(null);
     };
@@ -43,7 +45,7 @@ const Comments: FC<IComments> = (props) => {
     };
 
     const updateComment = (text: string, commentId: string) => {
-        updateCommentApi(text, commentId).then(()=>{
+      updateCommentFirebase(text, commentId).then(()=>{
             const updatedComments = comments.map(comment => {
                 if(comment.id === commentId){
                     return {...comment, body: text};
@@ -56,9 +58,9 @@ const Comments: FC<IComments> = (props) => {
     };
 
     useEffect(()=>{
-        getComments().then(data => {
-            setComments(data)
-        });
+      getAllCommentsFirebase().then(data => {
+        setComments(data)
+      });
     }, [])
     
     return (
