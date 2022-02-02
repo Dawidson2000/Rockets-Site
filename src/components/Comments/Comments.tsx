@@ -1,10 +1,15 @@
 import { FC, useEffect, useState } from 'react';
-import { addCommentFirebase, deleteCommentFirebase, updateCommentFirebase } from './api';
+import {
+	addCommentFirebase,
+	deleteCommentFirebase,
+	updateCommentFirebase,
+} from './api';
 import Comment from './Comment';
 import CommentForm from './CommentForm';
 import { getAllCommentsFirebase } from './api';
 import styled from 'styled-components';
 import CommentType, { ChangeCommentType } from '../../modals/comment-type';
+import LoadingSpinner from '../UI/LoadingSpinner';
 
 const CommentWrapper = styled.div`
 	& > h4 {
@@ -20,9 +25,14 @@ export interface IComments {
 const Comments: FC<IComments> = (props) => {
 	const [comments, setComments] = useState<CommentType[]>([]);
 	const [activeComment, setActiveComment] = useState<null | ChangeCommentType>(null);
+	const [isLoading, setIsLoading] = useState(false);
 
-	const rootComments = comments.filter((comment) => comment.parentId === '0')
-  .sort( (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+	const rootComments = comments
+		.filter((comment) => comment.parentId === '0')
+		.sort(
+			(a, b) =>
+				new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+		);
 
 	const getReplies = (commentId: string) => {
 		return comments
@@ -34,14 +44,14 @@ const Comments: FC<IComments> = (props) => {
 	};
 
 	const addComment = (text: string, parentId?: any) => {
-    addCommentFirebase(text, parentId).then((comment) =>
-			setComments(prevComments => [comment, ...prevComments])
+		addCommentFirebase(text, parentId).then((comment) =>
+			setComments((prevComments) => [comment, ...prevComments])
 		);
 		setActiveComment(null);
 	};
 
-	const deleteComment = (commentId: string) => {		
-    deleteCommentFirebase(commentId).then(() => {
+	const deleteComment = (commentId: string) => {
+		deleteCommentFirebase(commentId).then(() => {
 			const updatedComments = comments.filter(
 				(comment) => comment.id != commentId
 			);
@@ -49,8 +59,8 @@ const Comments: FC<IComments> = (props) => {
 		});
 	};
 
-	const updateComment = (updatingComment: CommentType, text: string) => {	
-    updateCommentFirebase(updatingComment, text).then(() => {
+	const updateComment = (updatingComment: CommentType, text: string) => {
+		updateCommentFirebase(updatingComment, text).then(() => {
 			const updatedComments = comments.map((existedComment) => {
 				if (existedComment.id === updatingComment.id) {
 					return { ...existedComment, body: text };
@@ -62,14 +72,37 @@ const Comments: FC<IComments> = (props) => {
 		});
 	};
 
-  const fetchData = async() => {
-    const data = await getAllCommentsFirebase();
-    setComments(data);
-  };
+	const fetchData = async () => {
+		setIsLoading(true);
+		const data = await getAllCommentsFirebase();
+		setIsLoading(false);
+
+		setComments(data);
+	};
 
 	useEffect(() => {
-    fetchData();
+		fetchData();
 	}, []);
+
+	let content: JSX.Element | JSX.Element[] = 
+    rootComments.length > 0 ?
+    rootComments.map((rootComment: any) => (
+		<Comment
+			key={rootComment.id}
+			comment={rootComment}
+			replies={getReplies(rootComment.id)}
+			currentUserId={props.currentUserId}
+			deleteComment={deleteComment}
+			activeComment={activeComment}
+			setActiveComment={setActiveComment}
+			parentId={null}
+			addComment={addComment}
+			updateComment={updateComment}
+			isRepliesButtonVisible={true}
+		/>)) 
+    : <p>Write first comment!</p>;
+
+  if(isLoading) content = <LoadingSpinner/>;
 
 	return (
 		<CommentWrapper>
@@ -82,21 +115,7 @@ const Comments: FC<IComments> = (props) => {
 				hasCancelButton={false}
 				cancelHandler={() => {}}
 			/>
-			{rootComments.map((rootComment: any) => (
-				<Comment
-					key={rootComment.id}
-					comment={rootComment}
-					replies={getReplies(rootComment.id)}
-					currentUserId={props.currentUserId}
-					deleteComment={deleteComment}
-					activeComment={activeComment}
-					setActiveComment={setActiveComment}
-					parentId={null}
-					addComment={addComment}
-					updateComment={updateComment}
-					isRepliesButtonVisible={true}
-				/>
-			))}
+			{content}
 		</CommentWrapper>
 	);
 };
