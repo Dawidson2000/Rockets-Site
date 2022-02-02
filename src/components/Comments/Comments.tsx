@@ -1,96 +1,110 @@
 import { FC, useEffect, useState } from 'react';
-import { addCommentFirebase, getComments, updateCommentFirebase } from './api';
-import Comment, { IComment } from './Comment';
+import { addCommentFirebase, deleteCommentFirebase, updateCommentFirebase } from './api';
+import Comment from './Comment';
 import CommentForm from './CommentForm';
-import { createComment as createCommentApi, deleteComment as removeCommentApi, updateComment as updateCommentApi } from './api';
 import { getAllCommentsFirebase } from './api';
 import styled from 'styled-components';
 import CommentType, { ChangeCommentType } from '../../modals/comment-type';
 
 const CommentWrapper = styled.div`
-    & > h4 {
-        text-align: left;
-        width: 100%;
-    }
+	& > h4 {
+		text-align: left;
+		width: 100%;
+	}
 `;
 
 export interface IComments {
-    currentUserId: string;
+	currentUserId: string;
 }
 
 const Comments: FC<IComments> = (props) => {
-    const [comments, setComments] = useState<CommentType[]>([]);
-    const [activeComment, setActiveComment] = useState<null | ChangeCommentType>(null);
-    const rootComments = comments.filter(comment => comment.parentId === '0');
-    console.log(rootComments);
+	const [comments, setComments] = useState<CommentType[]>([]);
+	const [activeComment, setActiveComment] = useState<null | ChangeCommentType>(null);
 
-    const getReplies = (commentId: string) => {
-        return comments.filter(comment => comment.parentId === commentId)
-        .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-    };
+	const rootComments = comments.filter((comment) => comment.parentId === '0')
+  .sort( (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
-    const addComment = (text: string, parentId?: any) => {
-      addCommentFirebase(text, parentId).then(comment =>
-            setComments([comment, ...comments]));
-            setActiveComment(null);
-    };
+	const getReplies = (commentId: string) => {
+		return comments
+			.filter((comment) => comment.parentId === commentId)
+			.sort(
+				(a, b) =>
+					new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+			);
+	};
 
-    const deleteComment = (commentId: string) => {
-        removeCommentApi(commentId).then(()=>{
-            const updatedComments = comments.filter(
-                comment => comment.id != commentId
-            );
-            setComments(updatedComments);
-        });
-    };
+	const addComment = (text: string, parentId?: any) => {
+    const existedComments = [...comments];
+		
+    addCommentFirebase(text, parentId).then((comment) =>
+			setComments([comment, ...existedComments])
+		);
+		setActiveComment(null);
+	};
 
-    const updateComment = (text: string, commentId: string) => {
-      updateCommentFirebase(text, commentId).then(()=>{
-            const updatedComments = comments.map(comment => {
-                if(comment.id === commentId){
-                    return {...comment, body: text};
-                }
-                return comment;
-            })
-            setComments(updatedComments);
-            setActiveComment(null);
-        })
-    };
+	const deleteComment = (commentId: string) => {
+    const existedComments = [...comments];
+		
+    deleteCommentFirebase(commentId).then(() => {
+			const updatedComments = existedComments.filter(
+				(comment) => comment.id != commentId
+			);
+			setComments(updatedComments);
+		});
+	};
 
-    useEffect(()=>{
-      getAllCommentsFirebase().then(data => {
-        setComments(data)
-      });
-    }, [])
-    
-    return (
-        <CommentWrapper>
-            <h2>Comments</h2>
-            <h4>Wtite Comment</h4>
-            <CommentForm 
-                submitLabel='Write' 
-                submitHandler={addComment} 
-                initialText='' 
-                hasCancelButton={false}
-                cancelHandler={()=>{}}
-                />
-            {rootComments.map((rootComment: any) => (
-                <Comment 
-                    key={rootComment.id} 
-                    comment={rootComment} 
-                    replies={getReplies(rootComment.id)}
-                    currentUserId={props.currentUserId}
-                    deleteComment={deleteComment}
-                    activeComment={activeComment}
-                    setActiveComment={setActiveComment}
-                    parentId={null}
-                    addComment={addComment}
-                    updateComment={updateComment}
-                    isRepliesButtonVisible={true}
-                />
-            ))}
-        </CommentWrapper>
-    ) 
+	const updateComment = (updatingComment: CommentType, text: string) => {
+    const existedComments = [...comments];
+		
+    updateCommentFirebase(updatingComment, text).then(() => {
+			const updatedComments = existedComments.map((existedComment) => {
+				if (existedComment.id === updatingComment.id) {
+					return { ...existedComment, body: text };
+				}
+				return existedComment;
+			});
+			setComments(updatedComments);
+			setActiveComment(null);
+		});
+	};
+
+  const fetchData = async() => {
+    const data = await getAllCommentsFirebase();
+    setComments(data);
+  };
+
+	useEffect(() => {
+    fetchData();
+	}, []);
+
+	return (
+		<CommentWrapper>
+			<h2>Comments</h2>
+			<h4>Wtite Comment</h4>
+			<CommentForm
+				submitLabel='Write'
+				submitHandler={addComment}
+				initialText=''
+				hasCancelButton={false}
+				cancelHandler={() => {}}
+			/>
+			{rootComments.map((rootComment: any) => (
+				<Comment
+					key={rootComment.id}
+					comment={rootComment}
+					replies={getReplies(rootComment.id)}
+					currentUserId={props.currentUserId}
+					deleteComment={deleteComment}
+					activeComment={activeComment}
+					setActiveComment={setActiveComment}
+					parentId={null}
+					addComment={addComment}
+					updateComment={updateComment}
+					isRepliesButtonVisible={true}
+				/>
+			))}
+		</CommentWrapper>
+	);
 };
- 
+
 export default Comments;

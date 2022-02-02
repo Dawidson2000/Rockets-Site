@@ -1,8 +1,10 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Comments from '../components/Comments/Comments';
 import CardHelper from '../components/UI/Card';
 import { Colors } from '../styledHelpers/Colors';
+import { getAllCommentsFirebase } from '../components/Comments/api';
+import CommentType from '../modals/comment-type';
 
 const HomeW = styled(CardHelper)`
 	max-width: 900px;
@@ -16,7 +18,6 @@ const HomeW = styled(CardHelper)`
 `;
 
 const Events: FC = () => {
-
 	return (
     <HomeW>
       <Comments currentUserId='1'/>

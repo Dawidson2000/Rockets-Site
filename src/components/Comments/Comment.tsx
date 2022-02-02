@@ -164,7 +164,7 @@ const Comment: FC<IComment> = (props) => {
 					<CommentForm
 						submitLabel='Update'
 						submitHandler={(text) =>
-							props.updateComment(text, props.comment.id)
+							props.updateComment(props.comment, text)
 						}
 						initialText={props.comment.body}
 						hasCancelButton={true}
