@@ -55,6 +55,15 @@ const Comments: FC<IComments> = (props) => {
 			const updatedComments = comments.filter(
 				(comment) => comment.id != commentId
 			);
+
+      updatedComments.filter(comment => {
+        if(comment.parentId === commentId){
+          deleteCommentFirebase(comment.id);
+          return false;
+        }
+        return true;             
+      })
+
 			setComments(updatedComments);
 		});
 	};
