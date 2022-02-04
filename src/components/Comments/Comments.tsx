@@ -24,7 +24,9 @@ export interface IComments {
 
 const Comments: FC<IComments> = (props) => {
 	const [comments, setComments] = useState<CommentType[]>([]);
-	const [activeComment, setActiveComment] = useState<null | ChangeCommentType>(null);
+	const [activeComment, setActiveComment] = useState<null | ChangeCommentType>(
+		null
+	);
 	const [isLoading, setIsLoading] = useState(false);
 
 	const rootComments = comments
@@ -56,13 +58,13 @@ const Comments: FC<IComments> = (props) => {
 				(comment) => comment.id != commentId
 			);
 
-      updatedComments.filter(comment => {
-        if(comment.parentId === commentId){
-          deleteCommentFirebase(comment.id);
-          return false;
-        }
-        return true;             
-      })
+			updatedComments.filter((comment) => {
+				if (comment.parentId === commentId) {
+					deleteCommentFirebase(comment.id);
+					return false;
+				}
+				return true;
+			});
 
 			setComments(updatedComments);
 		});
@@ -93,25 +95,28 @@ const Comments: FC<IComments> = (props) => {
 		fetchData();
 	}, []);
 
-	let content: JSX.Element | JSX.Element[] = 
-    rootComments.length > 0 ?
-    rootComments.map((rootComment: any) => (
-		<Comment
-			key={rootComment.id}
-			comment={rootComment}
-			replies={getReplies(rootComment.id)}
-			currentUserId={props.currentUserId}
-			deleteComment={deleteComment}
-			activeComment={activeComment}
-			setActiveComment={setActiveComment}
-			parentId={null}
-			addComment={addComment}
-			updateComment={updateComment}
-			isRepliesButtonVisible={true}
-		/>)) 
-    : <p>Write first comment!</p>;
+	let content: JSX.Element | JSX.Element[] =
+		rootComments.length > 0 ? (
+			rootComments.map((rootComment: any) => (
+				<Comment
+					key={rootComment.id}
+					comment={rootComment}
+					replies={getReplies(rootComment.id)}
+					currentUserId={props.currentUserId}
+					deleteComment={deleteComment}
+					activeComment={activeComment}
+					setActiveComment={setActiveComment}
+					parentId={null}
+					addComment={addComment}
+					updateComment={updateComment}
+					isRepliesButtonVisible={true}
+				/>
+			))
+		) : (
+			<p>Write first comment!</p>
+		);
 
-  if(isLoading) content = <LoadingSpinner/>;
+	if (isLoading) content = <LoadingSpinner />;
 
 	return (
 		<CommentWrapper>

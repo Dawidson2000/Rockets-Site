@@ -44,6 +44,7 @@ const CommentInfo = styled.div`
 		font-weight: 500;
 		font-size: 12px;
 		margin-left: 10px;
+    color: lightgrey;
 	}
 `;
 
