@@ -4,7 +4,7 @@ import DraggableListItem from './DraggableListItem';
 
 import { DragDropContext, DropResult} from 'react-beautiful-dnd';
 import { Droppable } from 'react-beautiful-dnd';
-import { Colors } from '../../styledHelpers/Colors';
+import DragForm from './DragForm';
 
 export const DUMMY_DATA = [
 	{
@@ -52,7 +52,11 @@ const List = styled.ul`
 `;
 
 const DraggableList: FC = () => {
-  const [list, setList] = useState<any[]>(DUMMY_DATA);
+  const [list, setList] = useState<{title: string}[]>(DUMMY_DATA);
+
+  const addToListHandler = (item: {title: string}) => {
+    setList(prevList => [item, ...prevList])
+  };
 
   const onDragEnd = (param: DropResult) => {
     const srcIndex = param.source.index;
@@ -75,6 +79,7 @@ const DraggableList: FC = () => {
 			<Droppable droppableId='droppable-1'>
 				{(provided) => (
 					<List ref={provided.innerRef} {...provided.droppableProps}>
+            <DragForm onAddToList={addToListHandler}/>
 						{list.map((item: any, index: number) => (
 							<DraggableListItem key={index} title={item.title} index={index}/>
 						))}
