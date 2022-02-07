@@ -5,6 +5,7 @@ import CardHelper from '../components/UI/Card';
 import { Colors } from '../styledHelpers/Colors';
 import { getAllCommentsFirebase } from '../components/Comments/api';
 import CommentType from '../modals/comment-type';
+import DraggableList from '../components/DraggableList/DraggableList';
 
 const HomeW = styled(CardHelper)`
 	max-width: 900px;
@@ -20,7 +21,8 @@ const HomeW = styled(CardHelper)`
 const Events: FC = () => {
 	return (
     <HomeW>
-      <Comments currentUserId='2'/>
+      {/* <Comments currentUserId='2'/> */}
+      <DraggableList/>
     </HomeW>
   );
 };
