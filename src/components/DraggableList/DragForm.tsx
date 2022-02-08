@@ -43,7 +43,7 @@ const Form = styled.form`
 	& > input {
 		background-color: transparent;
 		border: none;
-		border-bottom: 2px solid ${Colors.mainThemeColor};
+		border-bottom: 2px solid white;
 		outline: none;
 		font: inherit;
 		color: white;
@@ -51,6 +51,10 @@ const Form = styled.form`
 		font-size: 1.2rem;
 		padding-right: 40px;
 		box-sizing: border-box;
+
+    &:focus{
+      border-bottom: 2px solid ${Colors.mainThemeColor};
+    }
 
 		&::placeholder {
 			color: gray;
@@ -61,6 +65,7 @@ const Form = styled.form`
 const ErrorMessage = styled.p`
 	color: #9b2335;
 	margin: 0;
+  font-size: 0.8rem;
 `;
 
 export interface IDragForm {
@@ -70,14 +75,14 @@ export interface IDragForm {
 const DragForm: FC<IDragForm> = (props) => {
 	const submitHandler = (values: any) => {
 		props.onAddToList(values);
+		formik.resetForm();
 	};
 
-	const validationSchema = () =>
-		Yup.object().shape({
-			title: Yup.string()
-				.required('Tytuł jest wymagany')
-				.max(40, 'Tytuł może posiadac maksymalnie 30 znaków'),
-		});
+	const validationSchema = Yup.object().shape({
+		title: Yup.string()
+			.required('Tytuł jest wymagany')
+			.max(40, 'Tytuł może posiadac maksymalnie 30 znaków'),
+	});
 
 	const formik = useFormik({
 		initialValues: {
@@ -100,6 +105,7 @@ const DragForm: FC<IDragForm> = (props) => {
 					id='email'
 					type='text'
 					name='title'
+					onBlur={formik.handleBlur}
 					onChange={formik.handleChange}
 					value={formik.values.title}
 				/>
