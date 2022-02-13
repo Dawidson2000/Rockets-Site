@@ -36,16 +36,13 @@ const Spacecrafts: FC = () => {
 
 	useEffect(() => {
 		const apllySpacecrafts = (launchObj: any) => {
-			const loadedSpacecrafts: Spacecraft[] = [];
-			const Spacecrafts: any[] = launchObj.results;
-
-			Spacecrafts.forEach((spacecraft: any) => {
-				loadedSpacecrafts.push({
+			const loadedSpacecrafts: Spacecraft[] = launchObj.results.map((spacecraft: any) => (
+				{
 					id: spacecraft?.id,
 					name: spacecraft?.spacecraft?.name,
 					img: spacecraft?.spacecraft?.spacecraft_config?.image_url,
-				});
-			});
+				}
+			));
 			setSpacecrafts(loadedSpacecrafts);
 			setFilteredSpaceCrafts(loadedSpacecrafts);
 		};

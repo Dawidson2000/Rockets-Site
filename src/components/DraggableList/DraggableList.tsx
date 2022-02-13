@@ -40,7 +40,7 @@ export const DUMMY_DATA = [
 ];
 
 const List = styled.ul`
-	list-style-type: none;
+  list-style-type: none;
   display: flex;
   flex-direction: column;
   align-items: center;

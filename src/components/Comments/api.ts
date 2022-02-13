@@ -34,7 +34,7 @@ export const getAllCommentsFirebase = async () => {
   return comments;
 };
 
-export const addCommentFirebase = async (text: any, parentId = '0') => {
+export const addCommentFirebase = async (text: string, parentId = '0') => {
 	console.log('add', 'add');
 	const newCommentKey = push(child(ref(database), 'comments')).key;
 
