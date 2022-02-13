@@ -21,7 +21,6 @@ const HomeW = styled(CardHelper)`
 const Events: FC = () => {
 	return (
     <HomeW>
-      {/* <Comments currentUserId='2'/> */}
       <DraggableList/>
     </HomeW>
   );
