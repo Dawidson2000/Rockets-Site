@@ -33,13 +33,9 @@ const Launches: FC = () => {
 
 	useEffect(() => {
 		const apllyLaunches = (launchObj: any) => {
-			const loadedLaunches: Launch[] = [];
-			const launches: any[] = launchObj.results;
-	
-			launches.forEach((launch: any) => {
-        console.log("launches");
-				loadedLaunches.push({
-					id: launch?.id,
+			const loadedLaunches: Launch[] = launchObj.results.map((launch: any) => (
+        {
+          id: launch?.id,
 					name: launch?.name,
 					description: launch?.mission?.description,
 					orbit: launch?.mission?.orbit?.name,
@@ -48,9 +44,8 @@ const Launches: FC = () => {
 					place: launch?.pad?.location?.name,
           image: launch?.image,
           date: launch?.net
-				});
-			});
-      console.log(loadedLaunches);
+        }
+      ));
       setLaunches(loadedLaunches);
 		};
 
