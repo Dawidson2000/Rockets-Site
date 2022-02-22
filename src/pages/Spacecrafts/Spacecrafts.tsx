@@ -5,8 +5,10 @@ import SpacecraftCard from '../../components/Launches/SpacecraftCard';
 import LoadingSpinner from '../../components/UI/LoadingSpinner';
 import SearchInput from '../../components/UI/SearchInput';
 
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import './styles.css';
+import useHttp from '../../hooks/use-http';
+import { spacecraftsActions } from '../../store/spacecrafts-slice';
 
 const Wrapper = styled.div`
 	display: flex;
@@ -27,23 +29,63 @@ export type Spacecraft = {
 };
 
 const Spacecrafts: FC = () => {
-	const [filteredSpaceCrafts, setFilteredSpaceCrafts] = useState<Spacecraft[]>([]);
+	const [filteredSpaceCrafts, setFilteredSpaceCrafts] = useState<Spacecraft[]>(
+		[]
+	);
 	const [currentPage, setCurrentPage] = useState(0);
 	const [filteredValue, setFilteredValue] = useState('');
 
-  const spacecrafts = useSelector((state: any) => state.spacecrafts.spacecrafts);
-  const error = useSelector((state: any) => state.spacecrafts.error);
-  const isLoading = useSelector((state: any) => state.spacecrafts.isLoading);
-  
-  useEffect(()=>{
-    setFilteredSpaceCrafts(spacecrafts);
-  },[spacecrafts]);
-  
+	const spacecrafts = useSelector(
+		(state: any) => state.spacecrafts.spacecrafts
+	);
+	const isSpacecraftTouched = useSelector(
+		(state: any) => state.spacecrafts.isTouched
+	);
+	// const error = useSelector((state: any) => state.spacecrafts.error);
+	// const isLoading = useSelector((state: any) => state.spacecrafts.isLoading);
+
+	const { error, isLoading, sendRequest: fetchSpacecrafts } = useHttp();
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+    dispatch(spacecraftsActions.setIsTouched(true));
+		const apllySpacecrafts = (launchObj: any) => {
+			const loadedSpacecrafts: Spacecraft[] = launchObj.results.map(
+				(spacecraft: any) => ({
+					id: spacecraft?.id,
+					name: spacecraft?.spacecraft?.name,
+					img: spacecraft?.spacecraft?.spacecraft_config?.image_url,
+				})
+			);
+			dispatch(
+				spacecraftsActions.setSpacecrafts({
+					spacecrafts: loadedSpacecrafts,
+					error,
+					isLoading,
+				})
+			);
+		};
+		if (!isSpacecraftTouched) {
+			fetchSpacecrafts(
+				{
+					url: 'https://lldev.thespacedevs.com/2.2.0/spacecraft/flight/?limit=100',
+				},
+				apllySpacecrafts
+			);
+		}
+
+		return () => {};
+	}, [fetchSpacecrafts, isSpacecraftTouched]);
+
+	useEffect(() => {
+		setFilteredSpaceCrafts(spacecrafts);
+	}, [spacecrafts]);
+
 	const offset = currentPage * PER_PAGE;
 
 	const pageCount = Math.ceil(filteredSpaceCrafts.length / PER_PAGE);
 
-  const pageClickHandler = ({ selected: selectedPage }: any) => {
+	const pageClickHandler = ({ selected: selectedPage }: any) => {
 		setCurrentPage(selectedPage);
 	};
 
@@ -76,9 +118,13 @@ const Spacecrafts: FC = () => {
 
 	return (
 		<Wrapper>
-    <div style={{marginLeft: 'auto'}}>
-		  <SearchInput value={filteredValue} placeholder='Search by name...' onChange={inputSearchHandler}/>
-    </div>
+			<div style={{ marginLeft: 'auto' }}>
+				<SearchInput
+					value={filteredValue}
+					placeholder='Search by name...'
+					onChange={inputSearchHandler}
+				/>
+			</div>
 			{content}
 			<ReactPaginate
 				previousLabel={'PREVIOUS'}
@@ -100,4 +146,3 @@ const Spacecrafts: FC = () => {
 };
 
 export default Spacecrafts;
-

@@ -9,6 +9,7 @@ const spacecraftsSlice = createSlice({
 		spacecrafts: [] as Spacecraft[],
 		isLoading: false,
 		error: null,
+    isTouched: false
 	},
 	reducers: {
 		setSpacecrafts(state, action) {
@@ -17,6 +18,10 @@ const spacecraftsSlice = createSlice({
       state.isLoading = spacecrafts.isLoading;
       state.error = spacecrafts.error;
     },
+    setIsTouched(state, action) {
+      const isTouched = action.payload;
+      state.isTouched = true;
+    }
 	},
 });
 

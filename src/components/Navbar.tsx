@@ -7,6 +7,7 @@ import { GiHamburgerMenu } from 'react-icons/gi';
 import { MdClose } from 'react-icons/md';
 import { Link, NavLink } from 'react-router-dom';
 
+
 export interface INavWrapper {
 	isMobileMenuVisible: boolean;
 }
