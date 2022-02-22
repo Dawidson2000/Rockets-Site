@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import SpacecraftCard from '../../components/Launches/SpacecraftCard';
 import LoadingSpinner from '../../components/UI/LoadingSpinner';
 import SearchInput from '../../components/UI/SearchInput';
+import NationCheckboxes from '../../components/Spacecrafts/NationCheckboxes';
 
 import { useSelector, useDispatch } from 'react-redux';
 import './styles.css';
@@ -39,6 +40,7 @@ const Spacecrafts: FC = () => {
 	const spacecrafts = useSelector(
 		(state: RootState) => state.spacecrafts.spacecrafts
 	);
+  console.log(spacecrafts);
 	const isSpacecraftTouched = useSelector(
 		(state: RootState) => state.spacecrafts.isTouched
 	);
@@ -120,6 +122,7 @@ const Spacecrafts: FC = () => {
 	return (
 		<Wrapper>
 			<div style={{ marginLeft: 'auto' }}>
+        <NationCheckboxes/>
 				<SearchInput
 					value={filteredValue}
 					placeholder='Search by name...'

@@ -40,7 +40,6 @@ const DraggableList: FC = () => {
     let existedList = [...list]; 
    
     if(desIndex != null){ 
-      console.log("yez")
       let srcElement = existedList[srcIndex];
       existedList.splice(srcIndex, 1);
       existedList.splice(desIndex, 0, srcElement);
