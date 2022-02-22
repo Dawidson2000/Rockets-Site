@@ -6,38 +6,9 @@ import { DragDropContext, DropResult} from 'react-beautiful-dnd';
 import { Droppable } from 'react-beautiful-dnd';
 import DragForm from './DragForm';
 
-export const DUMMY_DATA = [
-	{
-		title: '1 element',
-	},
-	{
-		title: '2 element',
-	},
-	{
-		title: '3 element',
-	},
-	{
-		title: '4 element',
-	},
-	{
-		title: '5 element',
-	},
-  {
-		title: '6 element',
-	},
-	{
-		title: '7 element',
-	},
-	{
-		title: '8 element',
-	},
-	{
-		title: '9 element',
-	},
-	{
-		title: '10 element',
-	},
-];
+import { useSelector } from 'react-redux';
+import { Spacecraft } from '../../pages/Spacecrafts/Spacecrafts';
+import { RootState } from '../../store';
 
 const List = styled.ul`
   list-style-type: none;
@@ -52,10 +23,14 @@ const List = styled.ul`
 `;
 
 const DraggableList: FC = () => {
-  const [list, setList] = useState<{title: string}[]>(DUMMY_DATA);
+  const spacecrafts = useSelector(
+		(state: RootState) => state.spacecrafts.spacecrafts
+	);
+
+  const [list, setList] = useState<Spacecraft[]>(spacecrafts);
 
   const addToListHandler = (item: {title: string}) => {
-    setList(prevList => [item, ...prevList])
+    // setList(prevList => [item, ...prevList])
   };
 
   const onDragEnd = (param: DropResult) => {
@@ -80,8 +55,8 @@ const DraggableList: FC = () => {
 				{(provided) => (
 					<List ref={provided.innerRef} {...provided.droppableProps}>
             <DragForm onAddToList={addToListHandler}/>
-						{list.map((item: any, index: number) => (
-							<DraggableListItem key={index} title={item.title} index={index}/>
+						{list.map((item: Spacecraft, index: number) => (
+							<DraggableListItem key={index} title={item.name} index={index}/>
 						))}
             {provided.placeholder}
 					</List>

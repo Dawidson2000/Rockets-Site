@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import './styles.css';
 import useHttp from '../../hooks/use-http';
 import { spacecraftsActions } from '../../store/spacecrafts-slice';
+import { RootState } from '../../store';
 
 const Wrapper = styled.div`
 	display: flex;
@@ -36,10 +37,10 @@ const Spacecrafts: FC = () => {
 	const [filteredValue, setFilteredValue] = useState('');
 
 	const spacecrafts = useSelector(
-		(state: any) => state.spacecrafts.spacecrafts
+		(state: RootState) => state.spacecrafts.spacecrafts
 	);
 	const isSpacecraftTouched = useSelector(
-		(state: any) => state.spacecrafts.isTouched
+		(state: RootState) => state.spacecrafts.isTouched
 	);
 	// const error = useSelector((state: any) => state.spacecrafts.error);
 	// const isLoading = useSelector((state: any) => state.spacecrafts.isLoading);
