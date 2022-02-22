@@ -3,9 +3,9 @@ import ReactPaginate from 'react-paginate';
 import styled from 'styled-components';
 import SpacecraftCard from '../../components/Launches/SpacecraftCard';
 import LoadingSpinner from '../../components/UI/LoadingSpinner';
-import useHttp from '../../hooks/use-http';
 import SearchInput from '../../components/UI/SearchInput';
 
+import { useSelector } from 'react-redux';
 import './styles.css';
 
 const Wrapper = styled.div`
@@ -27,43 +27,25 @@ export type Spacecraft = {
 };
 
 const Spacecrafts: FC = () => {
-	const [spacecrafts, setSpacecrafts] = useState<Spacecraft[]>([]);
 	const [filteredSpaceCrafts, setFilteredSpaceCrafts] = useState<Spacecraft[]>([]);
 	const [currentPage, setCurrentPage] = useState(0);
 	const [filteredValue, setFilteredValue] = useState('');
 
-	const { error, isLoading, sendRequest: fetchSpacecrafts } = useHttp();
-
-	useEffect(() => {
-		const apllySpacecrafts = (launchObj: any) => {
-			const loadedSpacecrafts: Spacecraft[] = launchObj.results.map((spacecraft: any) => (
-				{
-					id: spacecraft?.id,
-					name: spacecraft?.spacecraft?.name,
-					img: spacecraft?.spacecraft?.spacecraft_config?.image_url,
-				}
-			));
-			setSpacecrafts(loadedSpacecrafts);
-			setFilteredSpaceCrafts(loadedSpacecrafts);
-		};
-
-		fetchSpacecrafts(
-			{
-				url: 'https://lldev.thespacedevs.com/2.2.0/spacecraft/flight/?limit=100',
-			},
-			apllySpacecrafts
-		);
-
-    return () => {};
-	}, [fetchSpacecrafts]);
-
-	const pageClickHandler = ({ selected: selectedPage }: any) => {
-		setCurrentPage(selectedPage);
-	};
-
+  const spacecrafts = useSelector((state: any) => state.spacecrafts.spacecrafts);
+  const error = useSelector((state: any) => state.spacecrafts.error);
+  const isLoading = useSelector((state: any) => state.spacecrafts.isLoading);
+  
+  useEffect(()=>{
+    setFilteredSpaceCrafts(spacecrafts);
+  },[spacecrafts]);
+  
 	const offset = currentPage * PER_PAGE;
 
 	const pageCount = Math.ceil(filteredSpaceCrafts.length / PER_PAGE);
+
+  const pageClickHandler = ({ selected: selectedPage }: any) => {
+		setCurrentPage(selectedPage);
+	};
 
 	let content: any = filteredSpaceCrafts
 		.slice(offset, offset + PER_PAGE)
@@ -118,3 +100,4 @@ const Spacecrafts: FC = () => {
 };
 
 export default Spacecrafts;
+

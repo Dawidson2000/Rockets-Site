@@ -55,6 +55,7 @@ const Launches: FC = () => {
 			},
 			apllyLaunches
 		);
+    return () => {};
 	}, [fetchLaunches]);
 
   let content: any = launches.map((launch: Launch) => <LaunchCard key={launch.id} {...launch}/>);
